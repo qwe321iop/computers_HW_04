@@ -39,7 +39,7 @@ void Sorting(int choice);
 int main(int argc, char *argv[])
 {    
 	char option;
-	int choice;
+	int choice,k;
 	OpenFile("mydata4.txt");
 	ReadFile();
 	fclose(fptr);
@@ -177,25 +177,63 @@ void Average()
 void Ranking()
 {
 	int i,pass;
-	double ave[PUPIL],t1;
+	double ave[PUPIL],aveg[PUPIL],t1,t2;
 	if(show==0)
 	{
-		for(i=0;i<PUPIL;i++)
-			{
-				ave[i] = cc1b[i].average;
+		for(i = 0;i<PUPIL;i++)
+		{
+			ave[i] = cc1b[i].average;
 		}
-		for(pass=1;pass<=PUPIL;pass++)
+		for(pass=1;pass<PUPIL;pass++)
+		{
+			for(i=0;i<PUPIL-pass;i++)
 			{
-				for(i=0;i<PUPIL-pass;i++)
-					{
-						if(ave[i]>ave[i+1])
-							{
-								t1 = ave[i];
-								ave[i] = ave[i+1];
-								ave[i+1] = t1;
-								cc1b[i].rank = i;
-						}
-				}	
+				if(ave[i]<ave[i+1])
+				{
+					t1 = ave[i];
+					ave[i] = ave [i+1];
+					ave[i+1] = t1;
+				}		
+			}
+		}
+		for(i=0;i<PUPIL;i++)
+		{
+			for(pass=0;pass<PUPIL;pass++)
+			{
+				if(ave[i]==cc1b[pass].average)
+				{
+					cc1b[pass].rank=i+1;
+				}
+			}
+		}
+	}
+	else
+	{
+		for(i = 0;i<PUPIL;i++)
+		{
+			aveg[i]=cc1b[i].gpa;
+		}
+		for(pass=1;pass<PUPIL;pass++)
+		{
+			for(i=0;i<PUPIL-pass;i++)
+			{
+				if (aveg[i]<aveg[i+1])
+				{
+					t2=aveg[i];
+					aveg[i]=aveg[i+1];
+					aveg[i+1]=t2;
+				}
+			}
+		}
+		for(i=0;i<PUPIL;i++)
+		{
+			for(pass=0;pass<PUPIL;pass++)
+			{
+				if(aveg[i]==cc1b[pass].gpa)
+				{
+					cc1b[pass].rank=i+1;
+				}
+			}
 		}
 	}
 }
@@ -340,7 +378,7 @@ void Sorting(int choice)
 	{    
 		char t1[LENGTH],e1[eLENGTH],e2;
 		int t2;
-		double t3,e3;
+		double t3,e3,t4,e4;
 		int pass, j, k;
 		for (pass = 1; pass < PUPIL; pass++)
 		for (j = 0; j < PUPIL - pass; j++)
@@ -368,8 +406,9 @@ void Sorting(int choice)
 					t3 = cc1b[j].average;
 					cc1b[j].average = cc1b[j+1].average;						
 					cc1b[j+1].average = t3;	
-					 
-				
+					t4 = cc1b[j].rank;
+					cc1b[j].rank = cc1b[j+1].rank;
+					cc1b[j+1].rank = t4;
 			}
 		}
 			else
@@ -394,6 +433,10 @@ void Sorting(int choice)
 					e3= cc1b[j].gpa;
 					cc1b[j].gpa = cc1b[j+1].gpa;
 					cc1b[j+1].gpa = e3;
+					e4 = cc1b[j].rank;
+					cc1b[j].rank = cc1b[j+1].rank;
+					cc1b[j+1].rank = e4; 
+					
 			}
 			}
 		}
